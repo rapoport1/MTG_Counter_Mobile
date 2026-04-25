@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Linking } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import { ThemeDecoration } from './ui/ThemeDecoration';
 import { Toggle } from './ui/Toggle';
@@ -93,8 +93,11 @@ export const Settings = ({ onBack }) => {
 
         <View style={[styles.footer, { borderTopColor: theme.surfaceBorder, borderTopWidth: 0.5 }]}>
           <Text style={{ color: theme.textDim, fontSize: 11, textAlign: 'center' }}>
-            MTG Life · v4 prototype
+            Lifeforge: Arcanist's Ledger · v1.0
           </Text>
+          <Pressable onPress={() => Linking.openURL('https://rapoport1.github.io/MTG_Counter/privacy_policy.html')} style={{ marginTop: 10 }}>
+            <Text style={{ color: theme.accent, fontSize: 12, textAlign: 'center' }}>Privacy Policy</Text>
+          </Pressable>
         </View>
       </ScrollView>
     </View>

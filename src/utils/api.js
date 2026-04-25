@@ -5,7 +5,7 @@ export async function tryFetch(url) {
     const res = await fetch(url, {
       headers: {
         'Accept': 'application/json',
-        'User-Agent': 'MTGLifeCounterMobile/1.0'
+        'User-Agent': 'LifeforgeArcanistsLedger/1.0'
       }
     });
     return res;

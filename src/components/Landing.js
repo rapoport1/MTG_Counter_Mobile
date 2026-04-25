@@ -13,9 +13,9 @@ export const Landing = ({ onStart, onSettings }) => {
       <View style={styles.content}>
 
         <View style={styles.titleSection}>
-          <Text style={[styles.title, { color: theme.text }]}>MTG Life</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Lifeforge</Text>
           <Text style={[styles.subtitle, { color: theme.textMuted, fontStyle: theme.name === 'Fantasy' ? 'italic' : 'normal' }]}>
-            Commander tracker
+            Arcanist's Ledger
           </Text>
         </View>
         <Text style={[styles.prompt, { color: theme.text }]}>How many players?</Text>
