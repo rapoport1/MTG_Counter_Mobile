@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Modal } from 'react-native';
 import { Skull } from 'lucide-react-native';
 import { getColor } from '../constants/players';
 import { useSettings } from '../context/SettingsContext';
@@ -11,23 +11,25 @@ export function DeathModal({ player, onConfirm, onCancel }) {
   const color = getColor(player.colorId);
 
   return (
-    <Pressable style={styles.overlay} onPress={onCancel}>
-      <Pressable style={[styles.modal, { backgroundColor: theme.bg, borderColor: color.border, borderWidth: 1 }]} onPress={(e) => e.stopPropagation()}>
-        <Skull size={48} color={theme.danger} strokeWidth={1.4} style={{ marginBottom: 12, alignSelf: 'center' }} />
-        <Text style={[styles.title, { color: theme.text }]}>Eliminate {player.name}?</Text>
-        <Text style={[styles.description, { color: theme.textDim }]}>
-          Player is at 1 life. Confirm elimination, or cancel to keep them in the game. You can undo this if it was a mistake.
-        </Text>
-        <View style={styles.buttonGroup}>
-          <Pressable onPress={onConfirm} style={[styles.confirmButton, { backgroundColor: theme.danger }]}>
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: '500', textAlign: 'center' }}>Eliminate</Text>
-          </Pressable>
-          <Pressable onPress={onCancel} style={[styles.cancelButton, { borderColor: theme.surfaceBorder, borderWidth: 0.5 }]}>
-            <Text style={{ color: theme.text, fontSize: 14, textAlign: 'center' }}>Cancel — keep them alive</Text>
-          </Pressable>
-        </View>
+    <Modal visible={!!player} transparent animationType="fade" onRequestClose={onCancel}>
+      <Pressable style={styles.overlay} onPress={onCancel}>
+        <Pressable style={[styles.modal, { backgroundColor: theme.bg, borderColor: color.border, borderWidth: 1 }]} onPress={(e) => e.stopPropagation()}>
+          <Skull size={48} color={theme.danger} strokeWidth={1.4} style={{ marginBottom: 12, alignSelf: 'center' }} />
+          <Text style={[styles.title, { color: theme.text }]}>Eliminate {player.name}?</Text>
+          <Text style={[styles.description, { color: theme.textDim }]}>
+            Player has reached a lethal threshold. Confirm elimination, or cancel to keep them in the game. You can undo this if it was a mistake.
+          </Text>
+          <View style={styles.buttonGroup}>
+            <Pressable onPress={onConfirm} style={[styles.confirmButton, { backgroundColor: theme.danger }]}>
+              <Text style={{ color: 'white', fontSize: 16, fontWeight: '500', textAlign: 'center' }}>Eliminate</Text>
+            </Pressable>
+            <Pressable onPress={onCancel} style={[styles.cancelButton, { borderColor: theme.surfaceBorder, borderWidth: 0.5 }]}>
+              <Text style={{ color: theme.text, fontSize: 14, textAlign: 'center' }}>Cancel — keep them alive</Text>
+            </Pressable>
+          </View>
+        </Pressable>
       </Pressable>
-    </Pressable>
+    </Modal>
   );
 }
 

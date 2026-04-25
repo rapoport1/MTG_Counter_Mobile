@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
-import { PLAYER_COLORS } from '../../constants/players';
+import { PLAYER_COLORS } from '../constants/players';
 import { ThemeDecoration } from './ui/ThemeDecoration';
 import { PlayerSetupRow } from './PlayerSetupRow';
-import { useSettings } from '../../context/SettingsContext';
+import { useSettings } from '../context/SettingsContext';
 
 export function PlayerSetup({ onBack, onBegin }) {
   const { theme, playerCount } = useSettings();
@@ -24,7 +24,10 @@ export function PlayerSetup({ onBack, onBegin }) {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+    <KeyboardAvoidingView 
+      style={[styles.container, { backgroundColor: theme.bg }]}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
       <ThemeDecoration theme={theme} />
       <View style={styles.content}>
         <View style={styles.header}>
@@ -54,7 +57,7 @@ export function PlayerSetup({ onBack, onBegin }) {
           </Text>
         </Pressable>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

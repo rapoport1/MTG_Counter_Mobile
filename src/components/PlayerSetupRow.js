@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, ImageBackground } from 'react-native';
 import { X } from 'lucide-react-native';
-import { PLAYER_COLORS, getColor } from '../../constants/players';
+import { PLAYER_COLORS, getColor } from '../constants/players';
 import { CommanderSearch } from './CommanderSearch';
-import { useSettings } from '../../context/SettingsContext';
+import { useSettings } from '../context/SettingsContext';
 
 export function PlayerSetupRow({ player, onUpdate }) {
   const { theme, toggles } = useSettings();
@@ -80,12 +80,12 @@ export function PlayerSetupRow({ player, onUpdate }) {
         )}
       </View>
 
-      {partnerEnabled && player.commander && (
+      {partnerEnabled && player.commander && player.commander.hasPartner && (
         <View style={styles.partnerSection}>
           {player.partner ? (
             renderCommanderTag(player.partner, 'partner')
           ) : searchingSlot === 'partner' ? (
-            <CommanderSearch onSelect={(c) => handleSelect('partner', c)} onCancel={() => setSearchingSlot(null)} />
+            <CommanderSearch onSelect={(c) => handleSelect('partner', c)} onCancel={() => setSearchingSlot(null)} isPartnerSearch={true} />
           ) : (
             <Pressable onPress={() => setSearchingSlot('partner')} style={[styles.addButton, { borderColor: theme.surfaceBorder, borderWidth: 0.5, borderStyle: 'dashed' }]}>
               <Text style={{ color: theme.textMuted, fontSize: 13 }}>+ Add partner commander</Text>

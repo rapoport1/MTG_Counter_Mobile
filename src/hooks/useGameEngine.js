@@ -109,6 +109,41 @@ export function useGameEngine(initialPlayers, toggles) {
     clearTimersRef.current = {};
   }
 
+  function onPoisonTick(playerId, direction) {
+    const p = players.find(p => p.id === playerId);
+    if (!p) return;
+    
+    const currentPoison = p.poison || 0;
+    const newPoison = Math.max(0, currentPoison + direction);
+    
+    if (newPoison >= 10 && direction > 0) {
+      tryDie(playerId);
+    }
+    
+    setPlayers((ps) => ps.map((p) => (p.id === playerId ? { ...p, poison: newPoison } : p)));
+  }
+
+  function onCommanderDamageTick(playerId, sourceId, isPartner, direction) {
+    const p = players.find(p => p.id === playerId);
+    if (!p) return;
+    
+    const key = isPartner ? `${sourceId}_partner` : sourceId;
+    const currentDmg = (p.commanderDamage && p.commanderDamage[key]) || 0;
+    const newDmg = Math.max(0, currentDmg + direction);
+    
+    if (newDmg >= 21 && direction > 0) {
+      tryDie(playerId);
+    }
+    
+    setPlayers((ps) => ps.map((p) => {
+      if (p.id !== playerId) return p;
+      return {
+        ...p,
+        commanderDamage: { ...(p.commanderDamage || {}), [key]: newDmg }
+      };
+    }));
+  }
+
   const pendingPlayer = pendingDeath != null ? players.find((p) => p.id === pendingDeath) : null;
   const canUndo = history.length > 0;
 
@@ -123,7 +158,9 @@ export function useGameEngine(initialPlayers, toggles) {
       confirmDeath,
       cancelDeath,
       undo,
-      restart
+      restart,
+      onPoisonTick,
+      onCommanderDamageTick
     }
   };
 }

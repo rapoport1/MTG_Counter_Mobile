@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import { ThemeDecoration } from './ui/ThemeDecoration';
 import { Toggle } from './ui/Toggle';
-import { THEMES } from '../../constants/themes';
-import { useSettings } from '../../context/SettingsContext';
+import { THEMES } from '../constants/themes';
+import { useSettings } from '../context/SettingsContext';
 
 export const Settings = ({ onBack }) => {
   const { theme, themeKey, setThemeKey, startingLife, setStartingLife, toggles, setToggles } = useSettings();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Modal } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Modal, StatusBar } from 'react-native';
 import { Undo2, Scale, MoreHorizontal } from 'lucide-react-native';
 import { PlayerPanel } from './PlayerPanel';
 import { DeathModal } from './DeathModal';
@@ -29,6 +29,7 @@ export function GameScreen({ initialPlayers, onEndGame }) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.bg }]}>
+      <StatusBar hidden={true} />
       <View style={styles.grid}>
         {layout.rows.map((row, rIdx) => (
           <View key={rIdx} style={styles.row}>
@@ -41,7 +42,10 @@ export function GameScreen({ initialPlayers, onEndGame }) {
                     displayDelta={displayDeltas[p.id]}
                     rotated={slot.rotated}
                     onLifeTick={(delta) => actions.onLifeTick(p.id, delta)}
+                    onPoisonTick={(delta) => actions.onPoisonTick(p.id, delta)}
+                    onCommanderDamageTick={(sourceId, isPartner, delta) => actions.onCommanderDamageTick(p.id, sourceId, isPartner, delta)}
                     onTryDie={() => actions.tryDie(p.id)}
+                    allPlayers={players}
                   />
                 </View>
               );
@@ -51,7 +55,7 @@ export function GameScreen({ initialPlayers, onEndGame }) {
       </View>
 
       <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
-        <View style={styles.centerMenuWrapper} pointerEvents="box-none">
+        <View style={[styles.centerMenuWrapper, players.length === 1 && { justifyContent: 'flex-end', paddingBottom: 60 }]} pointerEvents="box-none">
           <View style={[styles.centerMenu, { backgroundColor: theme.bg, borderColor: theme.surfaceBorder, borderWidth: 0.5 }]}>
             <Pressable
               onPress={actions.undo}

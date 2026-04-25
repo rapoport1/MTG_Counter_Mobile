@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Image, ScrollView } from 'react-native';
 import { Search, X } from 'lucide-react-native';
-import { useDebounce } from '../../hooks/useDebounce';
-import { searchScryfall, filterPopular } from '../../utils/api';
-import { useSettings } from '../../context/SettingsContext';
+import { useDebounce } from '../hooks/useDebounce';
+import { searchScryfall, filterPopular } from '../utils/api';
+import { useSettings } from '../context/SettingsContext';
 
-export function CommanderSearch({ onSelect, onCancel }) {
+export function CommanderSearch({ onSelect, onCancel, isPartnerSearch }) {
   const { theme } = useSettings();
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 300);
-  const [state, setState] = useState({ results: filterPopular(''), source: 'popular', error: null, loading: false });
+  
+  const initialPopular = isPartnerSearch 
+    ? filterPopular('').filter(r => r.hasPartner) 
+    : filterPopular('');
+    
+  const [state, setState] = useState({ results: initialPopular, source: 'popular', error: null, loading: false });
 
   useEffect(() => {
     const q = debouncedQuery.trim();
     if (q.length === 0) {
-      setState({ results: filterPopular(''), source: 'popular', error: null, loading: false });
+      setState({ results: initialPopular, source: 'popular', error: null, loading: false });
       return;
     }
     if (q.length < 2) {
@@ -25,11 +30,14 @@ export function CommanderSearch({ onSelect, onCancel }) {
     setState((s) => ({ ...s, loading: true }));
     searchScryfall(q).then((result) => {
       if (cancelled) return;
+      
       if (result.results.length > 0) {
-        setState({ results: result.results, source: 'api', error: null, loading: false });
+        const filtered = isPartnerSearch ? result.results.filter(r => r.hasPartner) : result.results;
+        setState({ results: filtered, source: 'api', error: null, loading: false });
       } else {
         const popular = filterPopular(q);
-        setState({ results: popular, source: 'popular', error: result.error, loading: false });
+        const filtered = isPartnerSearch ? popular.filter(r => r.hasPartner) : popular;
+        setState({ results: filtered, source: 'popular', error: result.error, loading: false });
       }
     });
     return () => { cancelled = true; };
