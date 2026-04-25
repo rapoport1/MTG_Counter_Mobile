@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Lifeforge: Arcanist's Ledger",
-    "slug": "lifeforge-arcanists-ledger",
+    "slug": "lifeforge-an-arcanists-ledger",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,8 +35,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": ""
+        "projectId": "b916eb1e-bcfa-48d8-a0fd-4d08f69457f3"
       }
-    }
+    },
+    "owner": "brapoport1s-organization"
   }
 }
