@@ -63,6 +63,7 @@ export function PlayerSetupRow({ player, onUpdate }) {
         <TextInput
           value={player.name}
           onChangeText={(text) => onUpdate({ name: text })}
+          selectTextOnFocus={true}
           maxLength={20}
           style={[styles.nameInput, { color: theme.text }]}
         />
